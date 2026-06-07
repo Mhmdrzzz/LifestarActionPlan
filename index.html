@@ -1,0 +1,211 @@
+<!doctype html><html lang="fa" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Lamana — Campaign Dashboard</title><script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script><style>
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma,Arial,sans-serif;background:#eef1f5;color:#0f172a;direction:rtl}
+.bar{position:sticky;top:0;background:#0b1220;color:#fff;display:flex;align-items:center;gap:14px;padding:11px 18px;z-index:50;box-shadow:0 2px 14px rgba(2,6,23,.18)}
+.bar .accent{position:absolute;left:0;right:0;bottom:0;height:3px;background:linear-gradient(90deg,#2563eb,#22d3ee,#2563eb)}
+.burger{cursor:pointer;font-size:20px;background:none;border:none;color:#fff;line-height:1}
+.spacer{flex:1}
+.logo .nm{font-weight:700;letter-spacing:1.5px;font-size:18px;color:#fff}
+.brand{display:flex;align-items:center;gap:8px;font-weight:700;font-size:14px;opacity:.95}
+.brand img{height:26px;max-width:120px;object-fit:contain;background:#fff;border-radius:6px;padding:2px 4px}
+.brand .bt{font-size:9px;color:#94a3b8;font-weight:600}
+.menu{position:fixed;top:0;right:0;height:100%;width:255px;background:#fff;box-shadow:-4px 0 22px rgba(2,6,23,.16);transform:translateX(100%);transition:.25s;z-index:60;padding:18px}
+.menu.open{transform:translateX(0)}.menu h3{font-size:12px;color:#64748b;margin:0 0 10px}
+.menu a{display:block;padding:11px 12px;border-radius:10px;color:#0f172a;text-decoration:none;font-size:14px;margin-bottom:6px;cursor:pointer}
+.menu a:hover{background:#f1f5f9}.menu a.active{background:#2563eb;color:#fff}
+.scrim{position:fixed;inset:0;background:rgba(2,6,23,.35);opacity:0;pointer-events:none;transition:.25s;z-index:55}
+.scrim.open{opacity:1;pointer-events:auto}
+.wrap{max-width:1120px;margin:0 auto;padding:24px}
+h1{font-size:23px;margin:0 0 2px;letter-spacing:-.2px;text-align:left;direction:ltr}.sub{color:#64748b;font-size:13px;margin-bottom:18px}
+.cards{display:grid;grid-template-columns:repeat(6,1fr);gap:11px;margin-bottom:20px}
+.cards.m9{grid-template-columns:repeat(5,1fr)}
+.card{background:#fff;border:1px solid #e6eaf0;border-radius:14px;padding:13px;text-align:center;box-shadow:0 1px 2px rgba(2,6,23,.04)}
+.card .v{font-size:22px;font-weight:800}.card .l{font-size:11px;color:#64748b;margin-top:3px}
+.grid{display:grid;grid-template-columns:1.05fr .95fr;gap:16px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:860px){.cards,.cards.m9{grid-template-columns:repeat(3,1fr)}.grid,.grid2{grid-template-columns:1fr}}
+.panel{background:#fff;border:1px solid #e6eaf0;border-radius:16px;padding:18px;margin-bottom:16px;box-shadow:0 1px 3px rgba(2,6,23,.05)}
+.panel h2{font-size:14px;margin:0 0 13px;text-align:right;padding-right:11px;border-right:3px solid #2563eb;line-height:1.2}
+.items,.mgrid{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.mgrid{grid-template-columns:repeat(3,1fr)}
+@media(max-width:860px){.items,.mgrid{grid-template-columns:1fr}}
+.item,.mcard{border:1px solid #eef1f5;border-radius:12px;padding:12px;transition:.15s}
+.item:hover,.mcard:hover{border-color:#dbe3ee;box-shadow:0 2px 10px rgba(2,6,23,.06)}
+.itop{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.mname{font-weight:700;font-size:13px}.atype{font-size:10px;color:#94a3b8;margin:3px 0 7px}
+.mdesc{font-size:12px;color:#334155;line-height:1.65}
+.chip{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;white-space:nowrap}
+.topic{font-size:13px;font-weight:600}
+.track{height:8px;background:#eef1f5;border-radius:6px;overflow:hidden;margin:9px 0 0}.fill{height:100%;border-radius:6px}
+.ibot{display:flex;justify-content:space-between;font-size:11px;color:#64748b;margin-top:6px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+td,th{padding:8px;border-bottom:1px solid #eef1f5;text-align:right}
+th{color:#64748b;font-weight:600;font-size:11px}
+td.d{direction:ltr;color:#334155;white-space:nowrap;text-align:center}.n{font-weight:600}
+a{color:#2563eb;text-decoration:none}
+.attn h2{border-right-color:#dc2626}
+.note{background:#fff8ed;border:1px solid #fde6c2;color:#92400e;border-radius:12px;padding:12px 14px;margin-bottom:16px;font-size:13px}
+.page{display:none}.page.show{display:block}
+.muted{color:#94a3b8;font-size:12px}
+.hero{background:linear-gradient(135deg,#1e3a8a,#2563eb 60%,#06b6d4);color:#fff;border-radius:18px;padding:20px 22px;margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;box-shadow:0 8px 24px rgba(37,99,235,.25)}
+.hero .big{font-size:42px;font-weight:800;line-height:1}.hero .lbl{font-size:13px;opacity:.9;margin-top:5px}
+.hero .spark{flex:1;min-width:240px;max-width:430px;height:72px}
+.cfg{display:flex;gap:8px;align-items:center;margin-bottom:16px;flex-wrap:wrap}
+.cfg input{flex:1;min-width:240px;padding:10px 12px;border:1px solid #cbd5e1;border-radius:10px;font-size:12px;direction:ltr}
+.cfg button{padding:10px 16px;border:none;border-radius:10px;background:#2563eb;color:#fff;font-size:13px;cursor:pointer;font-weight:600}
+.cfg .st{font-size:11px;color:#64748b}
+.livedot{font-size:11px;color:#16a34a;margin-bottom:14px}
+canvas{max-width:100%}
+</style></head><body><div class="bar"><button class="burger" onclick="openM()">&#9776;</button><div class="logo"><span class="nm">LAMANA</span></div><div class="spacer"></div><div class="brand" id="brandSlot"></div><div class="accent"></div></div><div class="scrim" id="scrim" onclick="closeM()"></div><div class="menu" id="menu"><h3>صفحه‌ها</h3><a id="nav-content" class="active" onclick="go('content')">Content Project Management</a><a id="nav-media" onclick="go('media')">Media Management</a><a id="nav-perf" onclick="go('perf')">Performance</a></div><div id="page-content" class="page show"><div class="wrap"><h1>Content Project Management Dashboard</h1><div class="sub">زنده از Google Sheet</div><div class="cards"><div class="card"><div class="v" id="kpi-total" style="color:#0f172a">—</div><div class="l">کل محتوا</div></div><div class="card"><div class="v" id="kpi-done" style="color:#16a34a">—</div><div class="l">منتشر شد</div></div><div class="card"><div class="v" id="kpi-ready" style="color:#2563eb">—</div><div class="l">آماده انتشار</div></div><div class="card"><div class="v" id="kpi-inprog" style="color:#64748b">—</div><div class="l">در صف تولید</div></div><div class="card"><div class="v" id="kpi-pct" style="color:#2563eb">—</div><div class="l">درصد منتشر</div></div><div class="card"><div class="v" id="kpi-up" style="color:#0f172a">—</div><div class="l">۱۴ روز آینده</div></div></div><div class="grid"><div class="panel"><h2>پیشرفت هر محتوا</h2><div class="items" id="contentItems"><div class="muted">در حال بارگذاری…</div></div></div><div><div class="panel attn"><h2>منتظر تأیید برند</h2><table><tr><th>محتوا</th><th>مرحله</th><th>ارسال جهت QC</th><th>انتشار</th></tr><tbody id="attnBody"></tbody></table></div><div class="panel"><h2>۱۴ روز آینده چه منتشر می‌شود</h2><table><tr><th>تاریخ</th><th>محتوا / فضا</th><th>کانال</th><th>وضعیت</th></tr><tbody id="upBody"></tbody></table></div></div></div></div></div><div id="page-media" class="page"><div class="wrap"><h1>Media Management Dashboard</h1><div class="sub">زنده از Google Sheet</div><div class="panel"><h2>کانال‌های اجرایی توسط لامانا</h2><div class="mgrid" id="execGrid"><div class="muted">در حال بارگذاری…</div></div></div><div class="panel"><h2>کانال‌های نظارتی توسط لامانا</h2><div class="mgrid" id="monGrid"><div class="muted">در حال بارگذاری…</div></div></div><div class="cards" style="grid-template-columns:repeat(5,1fr)"><div class="card"><div class="v" id="minf-total" style="color:#0f172a">—</div><div class="l">کل اینفلوئنسر/شات‌اوت</div></div><div class="card"><div class="v" id="minf-pub" style="color:#16a34a">—</div><div class="l">منتشر شد</div></div><div class="card"><div class="v" id="minf-ready" style="color:#2563eb">—</div><div class="l">آماده انتشار</div></div><div class="card"><div class="v" id="minf-prog" style="color:#64748b">—</div><div class="l">در صف تولید</div></div><div class="card"><div class="v" id="minf-shout" style="color:#0f172a">—</div><div class="l">شات‌اوت</div></div></div><div class="panel"><h2>اینفلوئنسرهای اینستاگرام</h2><table><tr><th>پیج</th><th>محتوا</th><th>وضعیت</th><th>تاریخ</th></tr><tbody id="infBody"></tbody></table></div><div class="panel"><h2>یوتیوبرها</h2><div class="sub" id="ytToday" style="margin:0 0 10px">…</div><table><tr><th>کانال</th><th>محتوا</th><th>وضعیت</th><th>تاریخ</th></tr><tbody id="ytBody"></tbody></table></div></div></div><div id="page-perf" class="page"><div class="wrap"><h1>Performance Dashboard</h1><div class="sub">عملکرد هفتگی · زنده از Google Sheet</div><div class="livedot" id="cfgStatus">● به‌روزرسانی خودکار از Google Sheet</div><div class="hero"><div><div class="big" id="rcBig">—</div><div class="lbl">Register Code — مجموع کل (مهم‌ترین شاخص)</div></div><div class="spark"><canvas id="rcSpark"></canvas></div></div><div class="cards m9"><div class="card"><div class="v" id="kpi-AdImpression">—</div><div class="l">Ad Impression</div></div><div class="card"><div class="v" id="kpi-Impression">—</div><div class="l">Impression</div></div><div class="card"><div class="v" id="kpi-VideoView">—</div><div class="l">Video View</div></div><div class="card"><div class="v" id="kpi-Click">—</div><div class="l">Click</div></div><div class="card"><div class="v" id="kpi-PageView">—</div><div class="l">Page View</div></div><div class="card"><div class="v" id="kpi-Users">—</div><div class="l">Users</div></div><div class="card"><div class="v" id="kpi-RegisterCode">—</div><div class="l">Register Code</div></div><div class="card"><div class="v" id="kpi-GamePlay">—</div><div class="l">Game Play</div></div><div class="card"><div class="v" id="kpi-GameLogin">—</div><div class="l">Game Login</div></div></div><div class="panel"><h2>Register Code — هفتگی و تجمعی</h2><div style="height:300px"><canvas id="rcChart"></canvas></div></div><div class="grid2"><div class="panel"><h2>Funnel — Impression تا Game Login</h2><div style="height:300px"><canvas id="funnelChart"></canvas></div></div><div class="panel"><h2>Traffic</h2><div style="height:300px"><canvas id="trafficChart"></canvas></div></div></div><div class="panel"><h2>Users & Game</h2><div style="height:280px"><canvas id="engChart"></canvas></div></div></div></div><script>
+// ===== CONFIG =====
+var CONFIG_SHEET="https://docs.google.com/spreadsheets/d/1q-w0VQtLZAOpb_R7GeFn2hl3x4jeAiVgH_7TBeTVu8I/edit";
+var CONFIG_BRAND_NAME="LIFE STAR";
+var CONFIG_BRAND_LOGO="";
+var ASOF=new Date("2025-06-06");
+var STAGES=["Ideation", "Vendor design", "In production", "Internal QC", "Brand QC", "Ready to publish", "Published"], SCO={"منتشر شد": "#16a34a", "آماده انتشار": "#2563eb", "در حال تولید": "#d97706", "آپدیت می شود": "#6b7280", "لغو شد": "#dc2626"}, EXEC=["Banner Ads", "In-App Ads", "Native Ads", "Google Ads", "Retargeting Ads", "YouTube Ads"], MON=["Video Ad Networks", "Pre-Roll Video Ads", "آپ", "Neshan", "Varzesh 3"], METRICS=["Ad Impression", "Impression", "Video View", "Click", "Page View", "Users", "Register Code", "Game Play", "Game Login"];
+// ==================
+function el(i){return document.getElementById(i)}
+function setText(i,v){var e=el(i);if(e)e.textContent=v}
+function esc(s){s=(s==null?'':''+s);return s.replace(/[&<>"]/g,function(m){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]})}
+function num(x){var n=parseFloat((x==null?'':''+x).replace(/[^0-9.\-]/g,''));return isNaN(n)?0:n}
+function fnum(n){return Math.round(n).toLocaleString('en-US')}
+function chip(t,c){c=c||'#64748b';return '<span class="chip" style="background:'+c+'1a;color:'+c+'">'+esc(t)+'</span>'}
+function pd(s){if(!s)return null;var d=new Date(s);return isNaN(d.getTime())?null:d}
+function fmtd(s){var d=pd(s);return d?d.toLocaleDateString('en-GB',{day:'2-digit',month:'short'}):esc(s||'')}
+function emptyrow(n){return '<tr><td colspan="'+n+'" class="muted">—</td></tr>'}
+function lsGet(k){try{return localStorage.getItem(k)}catch(e){return null}}
+function lsSet(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+function sheetId(u){var m=(u||'').match(/\/d\/([a-zA-Z0-9-_]+)/);return m?m[1]:(u||'').trim()}
+function curId(){return sheetId(lsGet('ls_sheet')||CONFIG_SHEET)}
+
+// ===== TAB MAP — برای اینکه اسم تب‌ها قابل تغییر باشد، gid (شناسه‌ی عددی پایدار) را پر کنید =====
+// gid هر تب: روی تب کلیک کن، در آدرس مرورگر بعد از #gid= عدد را کپی کن و اینجا بگذار.
+// تا وقتی gid خالی است، با «اسم تب» خوانده می‌شود (پس اگر اسم را عوض کنی آن بخش خالی می‌شود).
+var TAB={
+ content:{gid:"",name:"Production"},
+ publish:{gid:"",name:"Publish (Media)"},
+ promo:{gid:"",name:"Promotion (Media)"},
+ infl:{gid:"",name:"Influencer & Shout-out"},
+ perf:{gid:"",name:"Performance"}
+};
+var __gc=0;
+function gviz(key,range,cb){
+ var id=curId();if(!id){cb(null);return}
+ var t=TAB[key]||{name:key,gid:""};
+ var name='__gv'+(__gc++),done=false;
+ window[name]=function(resp){if(done)return;done=true;
+   try{var tb=resp.table,cols=tb.cols.map(function(c){return (c.label||'').toString().trim()});
+     var rows=tb.rows.map(function(r){var o={};for(var j=0;j<cols.length;j++){var c=r.c[j];o[cols[j]]=c?(c.f!=null?c.f:c.v):null}return o});
+     cb(rows)}catch(e){cb(null)}
+   try{delete window[name]}catch(e){}};
+ var u='https://docs.google.com/spreadsheets/d/'+id+'/gviz/tq?'
+   +(t.gid?('gid='+t.gid):('sheet='+encodeURIComponent(t.name)))
+   +(range?('&range='+range):'')+'&headers=1&tqx=responseHandler:'+name+'&t='+Date.now();
+ var s=document.createElement('script');s.src=u;
+ s.onerror=function(){if(!done){done=true;cb(null)}};document.body.appendChild(s);
+ setTimeout(function(){if(!done){done=true;cb(null)}},9000);
+}
+
+// ---------- CONTENT ----------
+function renderContent(){
+ gviz('content','A4:L80',function(prod){
+  if(!prod){el('contentItems').innerHTML='<div class="muted">اتصال به شیت برقرار نشد.</div>';return}
+  prod=prod.filter(function(r){return r['Code']});
+  var st=function(s){return prod.filter(function(r){return r['Status']===s}).length};
+  var total=prod.length,done=st('منتشر شد'),ready=st('آماده انتشار'),inprog=st('آپدیت می شود');
+  setText('kpi-total',total);setText('kpi-done',done);setText('kpi-ready',ready);setText('kpi-inprog',inprog);
+  setText('kpi-pct',(total?Math.round(done/total*100):0)+'%');
+  prod.sort(function(a,b){return STAGES.indexOf(b['Stage'])-STAGES.indexOf(a['Stage'])});
+  el('contentItems').innerHTML=prod.map(function(r){var s=r['Status'],c=SCO[s]||'#64748b',p=num(r['Progress']);
+    return '<div class="item"><div class="itop"><span class="topic">'+esc(r['Deliverable / موضوع'])+'</span>'+chip(s,c)+'</div>'
+     +'<div class="track"><div class="fill" style="width:'+p+'%;background:'+c+'"></div></div>'
+     +'<div class="ibot"><span>'+esc(r['Stage'])+'</span><span>'+p+'%</span></div></div>'}).join('');
+  var attn=prod.filter(function(r){return r['Needs brand?']==='Yes'&&r['Status']!=='منتشر شد'});
+  el('attnBody').innerHTML=attn.map(function(r){return '<tr><td class="n">'+esc(r['Deliverable / موضوع'])+'</td><td>'+esc(r['Stage'])
+    +'</td><td class="d">'+fmtd(r['تاریخ ارسال جهت QC (میلادی)'])+'</td><td class="d">'+fmtd(r['تاریخ انتشار (میلادی)'])+'</td></tr>'}).join('')||emptyrow(4);
+ });
+ gviz('publish','A4:I400',function(pub){
+  pub=(pub||[]).filter(function(r){return r['Code']});
+  var hi=new Date(ASOF.getTime()+14*864e5);
+  var u=pub.filter(function(r){var d=pd(r['تاریخ انتشار (میلادی)']);return d&&d>=ASOF&&d<=hi&&r['Status']!=='منتشر شد'})
+           .sort(function(a,b){return pd(a['تاریخ انتشار (میلادی)'])-pd(b['تاریخ انتشار (میلادی)'])});
+  setText('kpi-up',u.length);
+  el('upBody').innerHTML=u.map(function(r){var c=SCO[r['Status']]||'#64748b';
+    return '<tr><td class="d">'+fmtd(r['تاریخ انتشار (میلادی)'])+'</td><td class="n">'+esc(r['Content / موضوع'])+'</td><td>'+esc(r['Platform / فضا'])+'</td><td>'+chip(r['Status'],c)+'</td></tr>'}).join('')||emptyrow(4);
+ });
+}
+// ---------- MEDIA ----------
+function renderMedia(){
+ gviz('promo','A4:H40',function(promo){
+  promo=(promo||[]).filter(function(r){return r['Ad Format']});
+  function cardOf(r){var s=r['Status']||'',c=SCO[s]||'#64748b';
+    return '<div class="mcard"><div class="itop"><span class="mname">'+esc(r['Ad Format'])+'</span>'+chip(s,c)+'</div>'
+     +'<div class="atype">'+esc(r['Ad Type'])+'</div><div class="mdesc">'+esc(r['آخرین وضعیت (توصیفی)']||'—')+'</div></div>'}
+  el('execGrid').innerHTML=promo.filter(function(r){return EXEC.indexOf(r['Ad Format'])>=0}).map(cardOf).join('')||'<div class="muted">—</div>';
+  el('monGrid').innerHTML=promo.filter(function(r){return MON.indexOf(r['Ad Format'])>=0}).map(cardOf).join('')||'<div class="muted">—</div>';
+ });
+ gviz('infl','A4:H60',function(inf){
+  inf=(inf||[]).filter(function(r){return r['Date (Solar)']});
+  function trow(r){var s=r['Status']||'',c=SCO[s]||'#64748b';
+    return '<tr><td class="n" style="direction:ltr;text-align:right">'+esc(r['Handle / پیج']||'—')+'</td><td>'+esc(r['محتوای تبلیغ‌شده (کد)']||r['Type'])+'</td><td>'+chip(s,c)+'</td><td class="d">'+esc(r['Date (Solar)'])+'</td></tr>'}
+  var ig=inf.filter(function(r){return (r['Platform']||'').indexOf('Instagram')>=0});
+  var yt=inf.filter(function(r){return (r['Platform']||'').indexOf('YouTube')>=0});
+  var ct=function(a,s){return a.filter(function(r){return r['Status']===s}).length};
+  var shout=function(a){return a.filter(function(r){return (r['Type']||'').indexOf('Shout')>=0}).length};
+  setText('minf-total',ig.length);setText('minf-pub',ct(ig,'منتشر شد'));setText('minf-ready',ct(ig,'آماده انتشار'));
+  setText('minf-prog',ct(ig,'آپدیت می شود'));setText('minf-shout',shout(ig));
+  el('infBody').innerHTML=ig.map(trow).join('')||emptyrow(4);
+  el('ytBody').innerHTML=yt.map(trow).join('')||emptyrow(4);
+  setText('ytToday',yt.length?(yt.length+' یوتیوبر در پایپ‌لاین'):'برای یوتیوبرها ردیفی با Platform=YouTube در شیت اضافه کنید تا اینجا ظاهر شود');
+ });
+}
+// ---------- PERFORMANCE ----------
+var CH={};function mkChart(id,cfg){if(CH[id])CH[id].destroy();CH[id]=new Chart(el(id),cfg)}
+function lblOf(r){return (r['Week']||r['Date']||'').toString()}
+function renderPerf(){
+ gviz('perf','',function(data){
+  var live=!!data;if(!data){el('cfgStatus').textContent='○ اتصال برقرار نشد';return}
+  data=data.filter(function(r){return lblOf(r)});
+  el('cfgStatus').textContent='● متصل به Google Sheet (زنده)';
+  var labels=data.map(lblOf);
+  function col(m){return data.map(function(r){return num(r[m])})}
+  var sums={};METRICS.forEach(function(m){sums[m]=col(m).reduce(function(a,b){return a+b},0)});
+  METRICS.forEach(function(m){setText('kpi-'+m.replace(/ /g,''),fnum(sums[m]))});
+  var rc=col('Register Code'),cum=[];rc.reduce(function(a,b,i){cum[i]=a+b;return cum[i]},0);
+  setText('rcBig',fnum(sums['Register Code']));
+  mkChart('rcSpark',{type:'line',data:{labels:labels,datasets:[{data:cum,borderColor:'#fff',backgroundColor:'rgba(255,255,255,.20)',fill:true,tension:.35,pointRadius:0,borderWidth:2}]},options:{plugins:{legend:{display:false}},scales:{x:{display:false},y:{display:false}},maintainAspectRatio:false}});
+  mkChart('rcChart',{data:{labels:labels,datasets:[
+    {type:'bar',label:'Register Code',data:rc,backgroundColor:'#2563eb',borderRadius:6,order:2},
+    {type:'line',label:'Cumulative',data:cum,borderColor:'#16a34a',tension:.35,yAxisID:'y1',order:1,pointRadius:2}]},
+    options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},scales:{y:{beginAtZero:true},y1:{position:'left',beginAtZero:true,grid:{drawOnChartArea:false}}}}});
+  var fs=['Impression','Video View','Click','Page View','Users','Register Code','Game Login'];
+  mkChart('funnelChart',{type:'bar',data:{labels:fs,datasets:[{data:fs.map(function(s){return sums[s]}),backgroundColor:['#1e3a8a','#2563eb','#3b82f6','#60a5fa','#93c5fd','#16a34a','#15803d'],borderRadius:6}]},options:{indexAxis:'y',plugins:{legend:{display:false}},responsive:true,maintainAspectRatio:false,scales:{x:{beginAtZero:true}}}});
+  mkChart('trafficChart',{type:'line',data:{labels:labels,datasets:[
+    {label:'Impression',data:col('Impression'),borderColor:'#2563eb',tension:.3,pointRadius:0},
+    {label:'Video View',data:col('Video View'),borderColor:'#7c3aed',tension:.3,pointRadius:0},
+    {label:'Page View',data:col('Page View'),borderColor:'#06b6d4',tension:.3,pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true}}}});
+  mkChart('engChart',{type:'line',data:{labels:labels,datasets:[
+    {label:'Users',data:col('Users'),borderColor:'#d97706',tension:.3,pointRadius:0},
+    {label:'Game Play',data:col('Game Play'),borderColor:'#16a34a',tension:.3,pointRadius:0},
+    {label:'Game Login',data:col('Game Login'),borderColor:'#dc2626',tension:.3,pointRadius:0}]},options:{responsive:true,maintainAspectRatio:false,scales:{y:{beginAtZero:true}}}});
+ });
+}
+// ---------- nav ----------
+function openM(){el('menu').classList.add('open');el('scrim').classList.add('open')}
+function closeM(){el('menu').classList.remove('open');el('scrim').classList.remove('open')}
+function go(p){
+ document.querySelectorAll('.page').forEach(function(e){e.classList.remove('show')});
+ el('page-'+p).classList.add('show');
+ document.querySelectorAll('.menu a').forEach(function(e){e.classList.remove('active')});
+ el('nav-'+p).classList.add('active');closeM();window.scrollTo(0,0);
+ if(p==='content')renderContent();else if(p==='media')renderMedia();else renderPerf();
+}
+window.addEventListener('load',function(){
+ el('brandSlot').innerHTML=(CONFIG_BRAND_LOGO?'<img src="'+CONFIG_BRAND_LOGO+'" alt="brand">':'<span>'+CONFIG_BRAND_NAME+'</span>')+'<span class="bt">BRAND</span>';
+ renderContent();
+});
+function refreshVisible(){var v=document.querySelector('.page.show');if(!v)return;var id=v.id.replace('page-','');
+ if(id==='content')renderContent();else if(id==='media')renderMedia();else renderPerf();}
+setInterval(refreshVisible,5000);
+document.addEventListener('visibilitychange',function(){if(!document.hidden)refreshVisible();});
+</script></body></html>
